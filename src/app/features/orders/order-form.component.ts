@@ -8,21 +8,22 @@ import {
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators, FormArray, FormGroup } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { DataService } from '../../core/services/data.service';
-import { Product, Order } from '../../core/models';
+import { Order } from '../../core/models';
 import { ButtonDirective } from '../../ui/components/button.directive';
 import { InputDirective, SelectDirective } from '../../ui/components/forms.directive';
+import { DatePipe, DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-order-form',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     RouterLink,
     ButtonDirective,
     InputDirective,
     SelectDirective,
+    DecimalPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

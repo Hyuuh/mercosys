@@ -1,12 +1,13 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common'; // DatePipe
+
 import { RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
 import { ButtonDirective } from '../../ui/components/button.directive';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-customer-list',
-  imports: [CommonModule, RouterLink, ButtonDirective],
+  imports: [RouterLink, ButtonDirective, DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="space-y-6">

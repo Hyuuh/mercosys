@@ -1,12 +1,11 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../core/services/theme.service';
 import { ButtonDirective } from '../components/button.directive';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, ButtonDirective],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, ButtonDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div

@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
 import { ButtonDirective } from '../../ui/components/button.directive';
@@ -7,7 +7,7 @@ import { BadgeComponent } from '../../ui/components/badge.component';
 
 @Component({
   selector: 'app-order-list',
-  imports: [CommonModule, RouterLink, ButtonDirective, BadgeComponent],
+  imports: [RouterLink, ButtonDirective, BadgeComponent, DatePipe, CurrencyPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="space-y-6">
