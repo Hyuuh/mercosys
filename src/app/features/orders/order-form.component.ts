@@ -1,0 +1,326 @@
+import {
+  Component,
+  inject,
+  signal,
+  computed,
+  effect,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators, FormArray, FormGroup } from '@angular/forms';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { DataService } from '../../core/services/data.service';
+import { Product, Order } from '../../core/models';
+import { ButtonDirective } from '../../ui/components/button.directive';
+import { InputDirective, SelectDirective } from '../../ui/components/forms.directive';
+
+@Component({
+  selector: 'app-order-form',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterLink,
+    ButtonDirective,
+    InputDirective,
+    SelectDirective,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <div class="space-y-6">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 dark:border-zinc-800 pb-4 gap-4"
+      >
+        <div>
+          <h2 class="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+            {{ isEditMode() ? 'Editar Orden' : 'Nueva Orden' }}
+          </h2>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400">
+            {{
+              isEditMode()
+                ? 'Modifica los detalles de la orden existente.'
+                : 'Crea una nueva orden de compra para un cliente.'
+            }}
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <a routerLink="/orders" uiButton variant="outline"> Cancelar </a>
+          <button
+            (click)="onSubmit()"
+            [disabled]="orderForm.invalid || items.length === 0"
+            uiButton
+            variant="primary"
+          >
+            {{ isEditMode() ? 'Actualizar Orden' : 'Guardar Orden' }}
+          </button>
+        </div>
+      </div>
+
+      <form [formGroup]="orderForm" class="space-y-8">
+        <!-- Customer Selection -->
+        <div
+          class="bg-white dark:bg-zinc-950 p-6 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4"
+        >
+          <h3 class="text-lg font-medium text-zinc-900 dark:text-zinc-50">
+            1. Seleccionar Cliente
+          </h3>
+          <div class="grid w-full max-w-sm items-center gap-1.5">
+            <label
+              for="customer"
+              class="text-sm font-medium leading-none text-zinc-900 dark:text-zinc-100 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >Cliente</label
+            >
+            <select uiSelect formControlName="customerId" id="customer">
+              <option value="" disabled selected>Selecciona un cliente...</option>
+              @for (c of dataService.customers(); track c.id) {
+                <option [value]="c.id">{{ c.fullName }} ({{ c.email }})</option>
+              }
+            </select>
+            @if (orderForm.get('customerId')?.invalid && orderForm.get('customerId')?.touched) {
+              <p class="text-xs text-red-500 font-medium">Debes seleccionar un cliente.</p>
+            }
+          </div>
+        </div>
+
+        <!-- Order Items -->
+        <div
+          class="bg-white dark:bg-zinc-950 p-6 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4"
+        >
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-medium text-zinc-900 dark:text-zinc-50">
+              2. Agregar Productos
+            </h3>
+            <button type="button" (click)="addItem()" uiButton variant="secondary" size="sm">
+              + Agregar Item
+            </button>
+          </div>
+
+          <div formArrayName="items" class="space-y-4">
+            @for (itemCtrl of items.controls; track $index; let i = $index) {
+              <div
+                [formGroupName]="i"
+                class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end border-b border-zinc-100 dark:border-zinc-800 pb-4 last:border-0 last:pb-0"
+              >
+                <div class="col-span-1 md:col-span-6 space-y-1">
+                  <label
+                    class="text-xs font-medium text-zinc-900 dark:text-zinc-100"
+                    *ngIf="i === 0 || items.length > 0"
+                    >Producto</label
+                  >
+                  <select uiSelect formControlName="productId" (change)="onProductSelect(i)">
+                    <option value="" disabled>Seleccionar producto...</option>
+                    @for (p of dataService.products(); track p.id) {
+                      <option [value]="p.id">{{ p.name }} - \${{ p.price }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="col-span-1 md:col-span-2 space-y-1">
+                  <label
+                    class="text-xs font-medium text-zinc-900 dark:text-zinc-100"
+                    *ngIf="i === 0 || items.length > 0"
+                    >Cantidad</label
+                  >
+                  <input uiInput type="number" formControlName="quantity" min="1" placeholder="1" />
+                </div>
+                <div class="col-span-1 md:col-span-2 space-y-1">
+                  <label
+                    class="text-xs font-medium text-zinc-900 dark:text-zinc-100"
+                    *ngIf="i === 0 || items.length > 0"
+                    >Precio Unit.</label
+                  >
+                  <div
+                    class="flex h-10 w-full items-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 px-3 py-2 text-sm text-zinc-500 dark:text-zinc-400 shadow-sm"
+                  >
+                    $ {{ itemCtrl.get('unitPrice')?.value || 0 }}
+                  </div>
+                </div>
+                <div class="col-span-1 md:col-span-2 flex justify-end pb-1 md:pb-0">
+                  <button
+                    type="button"
+                    (click)="removeItem(i)"
+                    uiButton
+                    variant="destructive"
+                    size="icon"
+                    class="w-full md:w-10"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            }
+            @if (items.length === 0) {
+              <div
+                class="text-center py-8 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-md text-zinc-500 dark:text-zinc-400 text-sm"
+              >
+                No hay productos en la orden. Agrega uno para continuar.
+              </div>
+            }
+          </div>
+
+          <!-- Summary -->
+          <div class="flex justify-end pt-4 border-t border-zinc-200 dark:border-zinc-800 mt-4">
+            <div class="w-full md:w-1/3 space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-zinc-500 dark:text-zinc-400">Subtotal</span>
+                <span class="font-medium text-zinc-900 dark:text-zinc-100"
+                  >\${{ total() | number: '1.2-2' }}</span
+                >
+              </div>
+              <div
+                class="flex justify-between text-base font-semibold text-zinc-900 dark:text-zinc-50 border-t border-zinc-200 dark:border-zinc-800 pt-2"
+              >
+                <span>Total Global</span>
+                <span>\${{ total() | number: '1.2-2' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  `,
+})
+export class OrderFormComponent {
+  fb = inject(FormBuilder);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+  dataService = inject(DataService);
+
+  orderForm = this.fb.group({
+    customerId: ['', Validators.required],
+    items: this.fb.array([]),
+  });
+
+  get items() {
+    return this.orderForm.get('items') as FormArray;
+  }
+
+  total = signal(0);
+  isEditMode = signal(false);
+  orderId = signal<string | null>(null);
+
+  constructor() {
+    this.orderForm.valueChanges.subscribe(() => {
+      this.calculateTotal();
+    });
+
+    // Check for edit mode
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (id) {
+        this.isEditMode.set(true);
+        this.orderId.set(id);
+      }
+    });
+
+    effect(() => {
+      const id = this.orderId();
+      const orders = this.dataService.orders();
+      if (id && orders.length > 0) {
+        const order = orders.find((o) => o.id === id);
+        if (order) {
+          this.patchForm(order);
+        }
+      }
+    });
+  }
+
+  patchForm(order: Order) {
+    this.orderForm.patchValue({ customerId: order.customerId });
+
+    this.items.clear();
+    if (order.items) {
+      order.items.forEach((item) => {
+        const itemGroup = this.fb.group({
+          productId: [item.productId, Validators.required],
+          quantity: [item.quantity, [Validators.required, Validators.min(1)]],
+          unitPrice: [{ value: item.unitPrice, disabled: true }],
+        });
+        this.items.push(itemGroup);
+      });
+      // Force recalculation
+      this.calculateTotal();
+    }
+  }
+
+  addItem() {
+    const itemGroup = this.fb.group({
+      productId: ['', Validators.required],
+      quantity: [1, [Validators.required, Validators.min(1)]],
+      unitPrice: [{ value: 0, disabled: true }],
+    });
+    this.items.push(itemGroup);
+  }
+
+  removeItem(index: number) {
+    this.items.removeAt(index);
+  }
+
+  onProductSelect(index: number) {
+    const group = this.items.at(index) as FormGroup;
+    const productId = group.get('productId')?.value;
+    const product = this.dataService.products().find((p) => p.id === productId);
+
+    if (product) {
+      group.patchValue({ unitPrice: product.price });
+    }
+  }
+
+  calculateTotal() {
+    let sum = 0;
+    this.items.controls.forEach((ctrl) => {
+      const qty = ctrl.get('quantity')?.value || 0;
+      const price = ctrl.get('unitPrice')?.value || 0;
+      sum += qty * price;
+    });
+    this.total.set(sum);
+  }
+
+  onSubmit() {
+    if (this.orderForm.valid) {
+      const formVal = this.orderForm.getRawValue(); // use getRawValue to get disabled fields too
+
+      // Prepare data for service
+      const items = formVal.items!.map((item: any) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+      }));
+
+      if (this.isEditMode() && this.orderId()) {
+        const currentOrder = this.dataService.orders().find((o) => o.id === this.orderId());
+        this.dataService.updateOrder(
+          this.orderId()!,
+          {
+            customerId: formVal.customerId!,
+            totalPrice: this.total(),
+            status: currentOrder?.status || 'pending',
+          },
+          items,
+        );
+      } else {
+        this.dataService.addOrder(
+          {
+            customerId: formVal.customerId!,
+            totalPrice: this.total(),
+            status: 'pending',
+          },
+          items,
+        );
+      }
+
+      this.router.navigate(['/orders']);
+    }
+  }
+}
