@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common'; // DatePipe
 import { RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
 import { ButtonDirective } from '../../ui/components/button.directive';
-import { BadgeComponent } from '../../ui/components/badge.component';
 
 @Component({
   selector: 'app-customer-list',
@@ -37,7 +36,7 @@ import { BadgeComponent } from '../../ui/components/badge.component';
                 </th>
                 <th class="px-4 py-3 align-middle font-medium whitespace-nowrap">Email</th>
                 <th class="px-4 py-3 align-middle font-medium whitespace-nowrap">Fecha Registro</th>
-                <th class="px-4 py-3 align-middle font-medium text-right whitespace-nowrap">
+                <th class="px-4 py-3 align-middle font-medium text-center whitespace-nowrap">
                   Acciones
                 </th>
               </tr>
@@ -59,8 +58,8 @@ import { BadgeComponent } from '../../ui/components/badge.component';
                   <td class="px-4 py-3 text-zinc-500 dark:text-zinc-400">
                     {{ customer.createdAt | date: 'mediumDate' }}
                   </td>
-                  <td class="px-4 py-3 text-right">
-                    <div class="flex justify-end gap-2">
+                  <td class="px-4 py-3">
+                    <div class="flex items-center justify-center gap-2">
                       <a
                         [routerLink]="['/customers', customer.id, 'edit']"
                         class="text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors p-1"

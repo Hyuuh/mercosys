@@ -34,6 +34,44 @@ app.post('/api/customers', async (req, res) => {
   }
 });
 
+app.put('/api/customers/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { email, fullName } = req.body;
+    const { rows } = await pool.query(
+      'UPDATE customers SET email = $1, full_name = $2 WHERE id = $3 RETURNING id, email, full_name as "fullName", created_at as "createdAt"',
+      [email, fullName, id],
+    );
+
+    if (rows.length === 0) {
+      res.status(404).json({ error: 'Customer not found' });
+      return;
+    }
+
+    console.log(`[DB] Customer updated: ${rows[0].id}`);
+    res.json(rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+});
+
+app.delete('/api/customers/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rowCount } = await pool.query('DELETE FROM customers WHERE id = $1', [id]);
+
+    if (rowCount === 0) {
+      res.status(404).json({ error: 'Customer not found' });
+      return;
+    }
+
+    console.log(`[DB] Customer deleted: ${id}`);
+    res.json({ message: 'Customer deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+});
+
 // --- Products ---
 app.get('/api/products', async (req, res) => {
   try {
@@ -55,6 +93,44 @@ app.post('/api/products', async (req, res) => {
     );
     console.log(`[DB] Product created: ${rows[0].id} - ${rows[0].sku}`);
     res.json(rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+});
+
+app.put('/api/products/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { sku, name, price } = req.body;
+    const { rows } = await pool.query(
+      'UPDATE products SET sku = $1, name = $2, price = $3 WHERE id = $4 RETURNING id, sku, name, price::float, created_at as "createdAt"',
+      [sku, name, price, id],
+    );
+
+    if (rows.length === 0) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+
+    console.log(`[DB] Product updated: ${rows[0].id}`);
+    res.json(rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+});
+
+app.delete('/api/products/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rowCount } = await pool.query('DELETE FROM products WHERE id = $1', [id]);
+
+    if (rowCount === 0) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+
+    console.log(`[DB] Product deleted: ${id}`);
+    res.json({ message: 'Product deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }

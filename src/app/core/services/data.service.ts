@@ -8,19 +8,15 @@ import { Customer, Order, OrderItem, Product } from '../models';
 })
 export class DataService {
   private http = inject(HttpClient);
-  // Assuming the server runs on port 3000
   private apiUrl = 'http://localhost:3000/api';
 
-  // Signals for state
   private _customers = signal<Customer[]>([]);
   private _products = signal<Product[]>([]);
   private _orders = signal<Order[]>([]);
 
-  // Public readonly signals
   customers = this._customers.asReadonly();
   products = this._products.asReadonly();
 
-  // Hydrated orders with Customer names and Items
   orders = computed(() => {
     const custMap = new Map(this._customers().map((c) => [c.id, c.fullName]));
     return this._orders().map((o) => ({
@@ -35,7 +31,6 @@ export class DataService {
 
   private async loadData() {
     try {
-      // Load all data in parallel
       const [customers, products, orders] = await Promise.all([
         firstValueFrom(this.http.get<Customer[]>(`${this.apiUrl}/customers`)),
         firstValueFrom(this.http.get<Product[]>(`${this.apiUrl}/products`)),
@@ -62,16 +57,24 @@ export class DataService {
     }
   }
 
-  updateCustomer(id: string, data: Partial<Omit<Customer, 'id' | 'createdAt'>>) {
-    // Placeholder for API UPDATE
-    this._customers.update((items) =>
-      items.map((item) => (item.id === id ? { ...item, ...data } : item)),
-    );
+  async updateCustomer(id: string, data: Partial<Omit<Customer, 'id' | 'createdAt'>>) {
+    try {
+      const updated = await firstValueFrom(
+        this.http.put<Customer>(`${this.apiUrl}/customers/${id}`, data),
+      );
+      this._customers.update((items) => items.map((item) => (item.id === id ? updated : item)));
+    } catch (e) {
+      console.error('Failed to update customer', e);
+    }
   }
 
-  deleteCustomer(id: string) {
-    // Placeholder for API DELETE
-    this._customers.update((items) => items.filter((item) => item.id !== id));
+  async deleteCustomer(id: string) {
+    try {
+      await firstValueFrom(this.http.delete(`${this.apiUrl}/customers/${id}`));
+      this._customers.update((items) => items.filter((item) => item.id !== id));
+    } catch (e) {
+      console.error('Failed to delete customer', e);
+    }
   }
 
   getCustomer(id: string): Customer | undefined {
@@ -90,16 +93,24 @@ export class DataService {
     }
   }
 
-  updateProduct(id: string, data: Partial<Omit<Product, 'id' | 'createdAt'>>) {
-    // Placeholder for API UPDATE
-    this._products.update((items) =>
-      items.map((item) => (item.id === id ? { ...item, ...data } : item)),
-    );
+  async updateProduct(id: string, data: Partial<Omit<Product, 'id' | 'createdAt'>>) {
+    try {
+      const updated = await firstValueFrom(
+        this.http.put<Product>(`${this.apiUrl}/products/${id}`, data),
+      );
+      this._products.update((items) => items.map((item) => (item.id === id ? updated : item)));
+    } catch (e) {
+      console.error('Failed to update product', e);
+    }
   }
 
-  deleteProduct(id: string) {
-    // Placeholder for API DELETE
-    this._products.update((items) => items.filter((item) => item.id !== id));
+  async deleteProduct(id: string) {
+    try {
+      await firstValueFrom(this.http.delete(`${this.apiUrl}/products/${id}`));
+      this._products.update((items) => items.filter((item) => item.id !== id));
+    } catch (e) {
+      console.error('Failed to delete product', e);
+    }
   }
 
   getProduct(id: string): Product | undefined {
@@ -114,7 +125,6 @@ export class DataService {
     try {
       const payload = { ...order, items };
       await firstValueFrom(this.http.post<Order>(`${this.apiUrl}/orders`, payload));
-      // Refresh orders to get the full object with items and derived DB fields
       this.reloadOrders();
     } catch (e) {
       console.error('Failed to create order', e);

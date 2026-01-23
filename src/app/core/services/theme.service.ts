@@ -9,11 +9,9 @@ export type Theme = 'light' | 'dark' | 'system';
 export class ThemeService {
   private platformId = inject(PLATFORM_ID);
 
-  // State
   private _theme = signal<Theme>('system');
   private _systemDark = signal<boolean>(false);
 
-  // Public API
   theme = this._theme.asReadonly();
 
   isDark = computed(() => {
@@ -25,14 +23,11 @@ export class ThemeService {
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
-      // Initialize system preference
       const media = window.matchMedia('(prefers-color-scheme: dark)');
       this._systemDark.set(media.matches);
 
-      // Listen for system changes
       media.addEventListener('change', (e) => {
         this._systemDark.set(e.matches);
-        // applyTheme will be triggered by effect if theme is system
       });
 
       this.loadTheme();

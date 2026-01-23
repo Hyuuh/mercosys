@@ -34,7 +34,7 @@ import { ButtonDirective } from '../../ui/components/button.directive';
                 <th class="px-4 py-3 align-middle font-medium text-right whitespace-nowrap">
                   Precio
                 </th>
-                <th class="px-4 py-3 align-middle font-medium text-right whitespace-nowrap">
+                <th class="px-4 py-3 align-middle font-medium text-center whitespace-nowrap">
                   Acciones
                 </th>
               </tr>
@@ -55,8 +55,8 @@ import { ButtonDirective } from '../../ui/components/button.directive';
                   >
                     {{ product.price | currency: 'USD' }}
                   </td>
-                  <td class="px-4 py-3 text-right">
-                    <div class="flex justify-end gap-2">
+                  <td class="px-4 py-3">
+                    <div class="flex items-center justify-center gap-2">
                       <a
                         [routerLink]="['/products', product.id, 'edit']"
                         class="text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors p-1"
