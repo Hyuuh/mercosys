@@ -1,9 +1,9 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { DataService } from '../../core/services/data.service';
-import { ButtonDirective } from '../../ui/components/button.directive';
-import { BadgeComponent } from '../../ui/components/badge.component';
+import { DataService } from '@core/services/data.service';
+import { ButtonDirective } from '@ui/components/button.directive';
+import { BadgeComponent } from '@ui/components/badge.component';
 
 @Component({
   selector: 'app-order-list',
@@ -65,7 +65,7 @@ import { BadgeComponent } from '../../ui/components/badge.component';
               @for (order of dataService.orders(); track order.id) {
                 <tr class="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                   <td
-                    class="px-4 py-3 font-medium text-zinc-900 dark:text-zinc-100 truncate max-w-[100px]"
+                    class="px-4 py-3 font-medium text-zinc-900 dark:text-zinc-100 truncate max-w-25"
                     title="{{ order.id }}"
                   >
                     <span class="font-mono text-xs text-zinc-500 dark:text-zinc-500">#</span

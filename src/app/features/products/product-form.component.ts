@@ -2,10 +2,10 @@ import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/cor
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { DataService } from '../../core/services/data.service';
-import { Product } from '../../core/models';
-import { ButtonDirective } from '../../ui/components/button.directive';
-import { InputDirective } from '../../ui/components/forms.directive';
+import { DataService } from '@core/services/data.service';
+import { Product } from '@core/models';
+import { ButtonDirective } from '@ui/components/button.directive';
+import { InputDirective } from '@ui/components/forms.directive';
 
 @Component({
   selector: 'app-product-form',

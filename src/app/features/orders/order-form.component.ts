@@ -9,11 +9,11 @@ import {
 import { FormBuilder, ReactiveFormsModule, Validators, FormArray, FormGroup } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 
-import { DataService } from '../../core/services/data.service';
-import { Order } from '../../core/models';
-import { ButtonDirective } from '../../ui/components/button.directive';
-import { InputDirective, SelectDirective } from '../../ui/components/forms.directive';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DataService } from '@core/services/data.service';
+import { Order } from '@core/models';
+import { ButtonDirective } from '@ui/components/button.directive';
+import { InputDirective, SelectDirective } from '@ui/components/forms.directive';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-order-form',
@@ -102,11 +102,11 @@ import { DatePipe, DecimalPipe } from '@angular/common';
                 class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end border-b border-zinc-100 dark:border-zinc-800 pb-4 last:border-0 last:pb-0"
               >
                 <div class="col-span-1 md:col-span-6 space-y-1">
-                  <label
-                    class="text-xs font-medium text-zinc-900 dark:text-zinc-100"
-                    *ngIf="i === 0 || items.length > 0"
-                    >Producto</label
-                  >
+                  @if (i === 0 || items.length > 0) {
+                    <label class="text-xs font-medium text-zinc-900 dark:text-zinc-100"
+                      >Producto</label
+                    >
+                  }
                   <select uiSelect formControlName="productId" (change)="onProductSelect(i)">
                     <option value="" disabled>Seleccionar producto...</option>
                     @for (p of dataService.products(); track p.id) {
@@ -115,19 +115,19 @@ import { DatePipe, DecimalPipe } from '@angular/common';
                   </select>
                 </div>
                 <div class="col-span-1 md:col-span-2 space-y-1">
-                  <label
-                    class="text-xs font-medium text-zinc-900 dark:text-zinc-100"
-                    *ngIf="i === 0 || items.length > 0"
-                    >Cantidad</label
-                  >
+                  @if (i === 0 || items.length > 0) {
+                    <label class="text-xs font-medium text-zinc-900 dark:text-zinc-100"
+                      >Cantidad</label
+                    >
+                  }
                   <input uiInput type="number" formControlName="quantity" min="1" placeholder="1" />
                 </div>
                 <div class="col-span-1 md:col-span-2 space-y-1">
-                  <label
-                    class="text-xs font-medium text-zinc-900 dark:text-zinc-100"
-                    *ngIf="i === 0 || items.length > 0"
-                    >Precio Unit.</label
-                  >
+                  @if (i === 0 || items.length > 0) {
+                    <label class="text-xs font-medium text-zinc-900 dark:text-zinc-100"
+                      >Precio Unit.</label
+                    >
+                  }
                   <div
                     class="flex h-10 w-full items-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 px-3 py-2 text-sm text-zinc-500 dark:text-zinc-400 shadow-sm"
                   >

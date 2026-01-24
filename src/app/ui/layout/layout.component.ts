@@ -1,7 +1,7 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { ThemeService } from '../../core/services/theme.service';
-import { ButtonDirective } from '../components/button.directive';
+import { ThemeService } from '@core/services/theme.service';
+import { ButtonDirective } from '@ui/components/button.directive';
 
 @Component({
   selector: 'app-layout',

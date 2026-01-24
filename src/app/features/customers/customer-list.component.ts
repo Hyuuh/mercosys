@@ -1,8 +1,8 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
-import { DataService } from '../../core/services/data.service';
-import { ButtonDirective } from '../../ui/components/button.directive';
+import { DataService } from '@core/services/data.service';
+import { ButtonDirective } from '@ui/components/button.directive';
 import { DatePipe } from '@angular/common';
 
 @Component({
