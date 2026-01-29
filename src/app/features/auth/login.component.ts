@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { SupabaseService } from '@core/services/supabase.service';
 import { ButtonDirective } from '@ui/components/button.directive';
 
@@ -75,6 +76,15 @@ import { ButtonDirective } from '@ui/components/button.directive';
 })
 export class LoginComponent {
   private supabase = inject(SupabaseService);
+  private router = inject(Router);
+
+  constructor() {
+    effect(() => {
+      if (this.supabase.session()) {
+        this.router.navigate(['/']);
+      }
+    });
+  }
 
   async handleLogin() {
     await this.supabase.signInWithGithub();

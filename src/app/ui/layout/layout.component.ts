@@ -148,30 +148,59 @@ import { CommonModule } from '@angular/common';
         </nav>
 
         <div class="p-4 border-t border-neutral-200 dark:border-neutral-800">
-          <div class="flex items-center gap-3">
-            <div class="h-8 w-8 rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
-              @if (supabase.user()?.user_metadata?.['avatar_url']) {
-                <img
-                  [src]="supabase.user()?.user_metadata?.['avatar_url']"
-                  alt="Avatar"
-                  class="h-full w-full object-cover"
-                />
-              } @else {
-                <div
-                  class="h-full w-full flex items-center justify-center text-xs font-bold text-neutral-600 dark:text-neutral-300"
-                >
-                  {{ supabase.user()?.email?.charAt(0)?.toUpperCase() }}
-                </div>
-              }
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3 min-w-0">
+              <div
+                class="h-8 w-8 shrink-0 rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden"
+              >
+                @if (supabase.user()?.user_metadata?.['avatar_url']) {
+                  <img
+                    [src]="supabase.user()?.user_metadata?.['avatar_url']"
+                    alt="Avatar"
+                    class="h-full w-full object-cover"
+                  />
+                } @else {
+                  <div
+                    class="h-full w-full flex items-center justify-center text-xs font-bold text-neutral-600 dark:text-neutral-300"
+                  >
+                    {{ supabase.user()?.email?.charAt(0)?.toUpperCase() }}
+                  </div>
+                }
+              </div>
+              <div class="text-sm overflow-hidden">
+                <p class="font-medium text-neutral-900 dark:text-neutral-100 truncate">
+                  {{ supabase.user()?.user_metadata?.['full_name'] || 'Usuario' }}
+                </p>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 truncate">
+                  {{ supabase.user()?.email }}
+                </p>
+              </div>
             </div>
-            <div class="text-sm overflow-hidden">
-              <p class="font-medium text-neutral-900 dark:text-neutral-100 truncate">
-                {{ supabase.user()?.user_metadata?.['full_name'] || 'Usuario' }}
-              </p>
-              <p class="text-xs text-neutral-500 dark:text-neutral-400 truncate">
-                {{ supabase.user()?.email }}
-              </p>
-            </div>
+
+            <button
+              uiButton
+              variant="ghost"
+              size="icon"
+              class="shrink-0 text-neutral-500 hover:text-red-600 dark:text-neutral-400 dark:hover:text-red-400"
+              (click)="signOut()"
+              title="Cerrar sesión"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+            </button>
           </div>
         </div>
       </aside>
@@ -256,15 +285,6 @@ import { CommonModule } from '@angular/common';
                   <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                 </svg>
               }
-            </button>
-            <button
-              uiButton
-              variant="ghost"
-              size="sm"
-              class="ml-2 text-neutral-600 dark:text-neutral-400 hover:text-red-500 dark:hover:text-red-400"
-              (click)="signOut()"
-            >
-              Salir
             </button>
           </div>
         </header>

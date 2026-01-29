@@ -49,28 +49,43 @@ import { DecimalPipe } from '@angular/common';
       </div>
 
       <form [formGroup]="orderForm" class="space-y-8">
-        <!-- Customer Selection -->
+        <!-- Customer Selection & Status -->
         <div
           class="bg-white dark:bg-neutral-950 p-6 rounded-md border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4"
         >
           <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-50">
-            1. Seleccionar Cliente
+            1. Detalles Generales
           </h3>
-          <div class="grid w-full max-w-sm items-center gap-1.5">
-            <label
-              for="customer"
-              class="text-sm font-medium leading-none text-neutral-900 dark:text-neutral-100 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >Cliente</label
-            >
-            <select uiSelect formControlName="customer_id" id="customer">
-              <option value="" disabled selected>Selecciona un cliente...</option>
-              @for (c of dataService.customers(); track c.id) {
-                <option [value]="c.id">{{ c.full_name }} ({{ c.email }})</option>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid w-full items-center gap-1.5">
+              <label
+                for="customer"
+                class="text-sm font-medium leading-none text-neutral-900 dark:text-neutral-100"
+                >Cliente</label
+              >
+              <select uiSelect formControlName="customer_id" id="customer">
+                <option value="" disabled selected>Selecciona un cliente...</option>
+                @for (c of dataService.customers(); track c.id) {
+                  <option [value]="c.id">{{ c.full_name }} ({{ c.email }})</option>
+                }
+              </select>
+              @if (orderForm.get('customer_id')?.invalid && orderForm.get('customer_id')?.touched) {
+                <p class="text-xs text-red-500 font-medium">Debes seleccionar un cliente.</p>
               }
-            </select>
-            @if (orderForm.get('customer_id')?.invalid && orderForm.get('customer_id')?.touched) {
-              <p class="text-xs text-red-500 font-medium">Debes seleccionar un cliente.</p>
-            }
+            </div>
+
+            <div class="grid w-full items-center gap-1.5">
+              <label
+                for="status"
+                class="text-sm font-medium leading-none text-neutral-900 dark:text-neutral-100"
+                >Estado de la Orden</label
+              >
+              <select uiSelect formControlName="status" id="status">
+                <option value="pending">Pendiente</option>
+                <option value="completed">Completada</option>
+                <option value="cancelled">Cancelada</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -194,6 +209,7 @@ export class OrderFormComponent {
 
   orderForm = this.fb.group({
     customer_id: ['', Validators.required],
+    status: ['pending', Validators.required],
     items: this.fb.array([]),
   });
 
@@ -232,7 +248,10 @@ export class OrderFormComponent {
   }
 
   patchForm(order: Order) {
-    this.orderForm.patchValue({ customer_id: order.customer_id });
+    this.orderForm.patchValue({
+      customer_id: order.customer_id,
+      status: order.status,
+    });
 
     this.items.clear();
     if (order.order_items) {
@@ -294,13 +313,12 @@ export class OrderFormComponent {
       }));
 
       if (this.isEditMode() && this.orderId()) {
-        const currentOrder = this.dataService.orders().find((o) => o.id === this.orderId());
         this.dataService.updateOrder(
           this.orderId()!,
           {
             customer_id: formVal.customer_id!,
             total_price: this.total(),
-            status: currentOrder?.status || 'pending',
+            status: (formVal.status as any) || 'pending',
           },
           items,
         );
@@ -309,7 +327,7 @@ export class OrderFormComponent {
           {
             customer_id: formVal.customer_id!,
             total_price: this.total(),
-            status: 'pending',
+            status: (formVal.status as any) || 'pending',
           },
           items,
         );
