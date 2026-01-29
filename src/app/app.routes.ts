@@ -6,11 +6,15 @@ import { CustomerListComponent } from './features/customers/customer-list.compon
 import { CustomerFormComponent } from './features/customers/customer-form.component';
 import { ProductListComponent } from './features/products/product-list.component';
 import { ProductFormComponent } from './features/products/product-form.component';
+import { LoginComponent } from './features/auth/login.component';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
+  { path: 'login', component: LoginComponent },
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'orders', pathMatch: 'full' },
 

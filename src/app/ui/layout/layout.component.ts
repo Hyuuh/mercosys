@@ -1,11 +1,13 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { ThemeService } from '@core/services/theme.service';
+import { SupabaseService } from '@core/services/supabase.service';
 import { ButtonDirective } from '@ui/components/button.directive';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, ButtonDirective],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, ButtonDirective, CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
@@ -147,14 +149,28 @@ import { ButtonDirective } from '@ui/components/button.directive';
 
         <div class="p-4 border-t border-neutral-200 dark:border-neutral-800">
           <div class="flex items-center gap-3">
-            <div
-              class="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center text-xs font-bold text-neutral-600 dark:text-neutral-300"
-            >
-              JD
+            <div class="h-8 w-8 rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
+              @if (supabase.user()?.user_metadata?.['avatar_url']) {
+                <img
+                  [src]="supabase.user()?.user_metadata?.['avatar_url']"
+                  alt="Avatar"
+                  class="h-full w-full object-cover"
+                />
+              } @else {
+                <div
+                  class="h-full w-full flex items-center justify-center text-xs font-bold text-neutral-600 dark:text-neutral-300"
+                >
+                  {{ supabase.user()?.email?.charAt(0)?.toUpperCase() }}
+                </div>
+              }
             </div>
-            <div class="text-sm">
-              <p class="font-medium text-neutral-900 dark:text-neutral-100">Administrador</p>
-              <p class="text-xs text-neutral-500 dark:text-neutral-400">Admin</p>
+            <div class="text-sm overflow-hidden">
+              <p class="font-medium text-neutral-900 dark:text-neutral-100 truncate">
+                {{ supabase.user()?.user_metadata?.['full_name'] || 'Usuario' }}
+              </p>
+              <p class="text-xs text-neutral-500 dark:text-neutral-400 truncate">
+                {{ supabase.user()?.email }}
+              </p>
             </div>
           </div>
         </div>
@@ -241,6 +257,15 @@ import { ButtonDirective } from '@ui/components/button.directive';
                 </svg>
               }
             </button>
+            <button
+              uiButton
+              variant="ghost"
+              size="sm"
+              class="ml-2 text-neutral-600 dark:text-neutral-400 hover:text-red-500 dark:hover:text-red-400"
+              (click)="signOut()"
+            >
+              Salir
+            </button>
           </div>
         </header>
 
@@ -256,6 +281,8 @@ import { ButtonDirective } from '@ui/components/button.directive';
 })
 export class LayoutComponent {
   themeService = inject(ThemeService);
+  supabase = inject(SupabaseService);
+  private router = inject(Router);
   sidebarOpen = signal(false);
 
   toggleSidebar() {
@@ -264,5 +291,10 @@ export class LayoutComponent {
 
   closeSidebar() {
     this.sidebarOpen.set(false);
+  }
+
+  async signOut() {
+    await this.supabase.signOut();
+    this.router.navigate(['/login']);
   }
 }
