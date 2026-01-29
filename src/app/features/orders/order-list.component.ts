@@ -94,12 +94,12 @@ import { BadgeComponent } from '@ui/components/badge.component';
                     </ui-badge>
                   </td>
                   <td class="px-4 py-3 text-zinc-500 dark:text-zinc-400 whitespace-nowrap">
-                    {{ order.placedAt | date: 'mediumDate' }}
+                    {{ order.placed_at | date: 'mediumDate' }}
                   </td>
                   <td
                     class="px-4 py-3 text-right font-medium text-zinc-900 dark:text-zinc-100 whitespace-nowrap"
                   >
-                    {{ order.totalPrice | currency: 'USD' }}
+                    {{ order.total_price | currency: 'USD' }}
                   </td>
                   <td class="px-4 py-3">
                     <div class="flex items-center justify-center gap-1">

@@ -1,14 +1,12 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { SupabaseService } from './supabase.service';
 import { Customer, Order, OrderItem, Product } from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
-  private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api';
+  private supabase = inject(SupabaseService).client;
 
   private _customers = signal<Customer[]>([]);
   private _products = signal<Product[]>([]);
@@ -18,10 +16,10 @@ export class DataService {
   products = this._products.asReadonly();
 
   orders = computed(() => {
-    const custMap = new Map(this._customers().map((c) => [c.id, c.fullName]));
+    const custMap = new Map(this._customers().map((c) => [c.id, c.full_name]));
     return this._orders().map((o) => ({
       ...o,
-      customerName: custMap.get(o.customerId) || 'Unknown',
+      customerName: custMap.get(o.customer_id) || 'Unknown',
     }));
   });
 
@@ -31,37 +29,48 @@ export class DataService {
 
   private async loadData() {
     try {
-      const [customers, products, orders] = await Promise.all([
-        firstValueFrom(this.http.get<Customer[]>(`${this.apiUrl}/customers`)),
-        firstValueFrom(this.http.get<Product[]>(`${this.apiUrl}/products`)),
-        firstValueFrom(this.http.get<Order[]>(`${this.apiUrl}/orders`)),
+      const [customersRes, productsRes, ordersRes] = await Promise.all([
+        this.supabase.from('customers').select('*'),
+        this.supabase.from('products').select('*'),
+        this.supabase.from('orders').select('*, order_items(*)'),
       ]);
 
-      this._customers.set(customers);
-      this._products.set(products);
-      this._orders.set(orders);
+      if (customersRes.error) throw customersRes.error;
+      if (productsRes.error) throw productsRes.error;
+      if (ordersRes.error) throw ordersRes.error;
+
+      this._customers.set(customersRes.data || []);
+      this._products.set(productsRes.data || []);
+      this._orders.set(ordersRes.data || []);
     } catch (error) {
-      console.error('Error loading data from API', error);
+      console.error('Error loading data from Supabase', error);
     }
   }
 
   // --- Customers ---
-  async addCustomer(customer: Omit<Customer, 'id' | 'createdAt'>) {
+  async addCustomer(customer: Omit<Customer, 'id' | 'created_at'>) {
     try {
-      const newCustomer = await firstValueFrom(
-        this.http.post<Customer>(`${this.apiUrl}/customers`, customer),
-      );
-      this._customers.update((items) => [newCustomer, ...items]);
+      const { data, error } = await this.supabase
+        .from('customers')
+        .insert(customer)
+        .select()
+        .single();
+      if (error) throw error;
+      this._customers.update((items) => [data, ...items]);
     } catch (e) {
       console.error('Failed to add customer', e);
     }
   }
 
-  async updateCustomer(id: string, data: Partial<Omit<Customer, 'id' | 'createdAt'>>) {
+  async updateCustomer(id: string, data: Partial<Omit<Customer, 'id' | 'created_at'>>) {
     try {
-      const updated = await firstValueFrom(
-        this.http.put<Customer>(`${this.apiUrl}/customers/${id}`, data),
-      );
+      const { data: updated, error } = await this.supabase
+        .from('customers')
+        .update(data)
+        .eq('id', id)
+        .select()
+        .single();
+      if (error) throw error;
       this._customers.update((items) => items.map((item) => (item.id === id ? updated : item)));
     } catch (e) {
       console.error('Failed to update customer', e);
@@ -70,7 +79,8 @@ export class DataService {
 
   async deleteCustomer(id: string) {
     try {
-      await firstValueFrom(this.http.delete(`${this.apiUrl}/customers/${id}`));
+      const { error } = await this.supabase.from('customers').delete().eq('id', id);
+      if (error) throw error;
       this._customers.update((items) => items.filter((item) => item.id !== id));
     } catch (e) {
       console.error('Failed to delete customer', e);
@@ -82,22 +92,29 @@ export class DataService {
   }
 
   // --- Products ---
-  async addProduct(product: Omit<Product, 'id' | 'createdAt'>) {
+  async addProduct(product: Omit<Product, 'id' | 'created_at'>) {
     try {
-      const newProduct = await firstValueFrom(
-        this.http.post<Product>(`${this.apiUrl}/products`, product),
-      );
-      this._products.update((items) => [newProduct, ...items]);
+      const { data, error } = await this.supabase
+        .from('products')
+        .insert(product)
+        .select()
+        .single();
+      if (error) throw error;
+      this._products.update((items) => [data, ...items]);
     } catch (e) {
       console.error('Failed to add product', e);
     }
   }
 
-  async updateProduct(id: string, data: Partial<Omit<Product, 'id' | 'createdAt'>>) {
+  async updateProduct(id: string, data: Partial<Omit<Product, 'id' | 'created_at'>>) {
     try {
-      const updated = await firstValueFrom(
-        this.http.put<Product>(`${this.apiUrl}/products/${id}`, data),
-      );
+      const { data: updated, error } = await this.supabase
+        .from('products')
+        .update(data)
+        .eq('id', id)
+        .select()
+        .single();
+      if (error) throw error;
       this._products.update((items) => items.map((item) => (item.id === id ? updated : item)));
     } catch (e) {
       console.error('Failed to update product', e);
@@ -106,7 +123,8 @@ export class DataService {
 
   async deleteProduct(id: string) {
     try {
-      await firstValueFrom(this.http.delete(`${this.apiUrl}/products/${id}`));
+      const { error } = await this.supabase.from('products').delete().eq('id', id);
+      if (error) throw error;
       this._products.update((items) => items.filter((item) => item.id !== id));
     } catch (e) {
       console.error('Failed to delete product', e);
@@ -119,12 +137,21 @@ export class DataService {
 
   // --- Orders ---
   async addOrder(
-    order: Omit<Order, 'id' | 'placedAt'>,
-    items: Omit<OrderItem, 'id' | 'orderId'>[],
+    order: Omit<Order, 'id' | 'placed_at'>,
+    items: Omit<OrderItem, 'id' | 'order_id'>[],
   ) {
     try {
-      const payload = { ...order, items };
-      await firstValueFrom(this.http.post<Order>(`${this.apiUrl}/orders`, payload));
+      const { data: newOrder, error: orderError } = await this.supabase
+        .from('orders')
+        .insert(order)
+        .select()
+        .single();
+      if (orderError) throw orderError;
+
+      const orderItems = items.map((item) => ({ ...item, order_id: newOrder.id }));
+      const { error: itemsError } = await this.supabase.from('order_items').insert(orderItems);
+      if (itemsError) throw itemsError;
+
       this.reloadOrders();
     } catch (e) {
       console.error('Failed to create order', e);
@@ -133,8 +160,9 @@ export class DataService {
 
   async reloadOrders() {
     try {
-      const orders = await firstValueFrom(this.http.get<Order[]>(`${this.apiUrl}/orders`));
-      this._orders.set(orders);
+      const { data, error } = await this.supabase.from('orders').select('*, order_items(*)');
+      if (error) throw error;
+      this._orders.set(data || []);
     } catch (e) {
       console.error(e);
     }
@@ -142,12 +170,19 @@ export class DataService {
 
   async updateOrder(
     id: string,
-    order: Partial<Omit<Order, 'id' | 'placedAt'>>,
-    items: Omit<OrderItem, 'id' | 'orderId'>[],
+    order: Partial<Omit<Order, 'id' | 'placed_at'>>,
+    items: Omit<OrderItem, 'id' | 'order_id'>[],
   ) {
     try {
-      const payload = { ...order, items };
-      await firstValueFrom(this.http.put<Order>(`${this.apiUrl}/orders/${id}`, payload));
+      const { error: orderError } = await this.supabase.from('orders').update(order).eq('id', id);
+      if (orderError) throw orderError;
+
+      // Delete existing items and insert new ones
+      await this.supabase.from('order_items').delete().eq('order_id', id);
+      const orderItems = items.map((item) => ({ ...item, order_id: id }));
+      const { error: itemsError } = await this.supabase.from('order_items').insert(orderItems);
+      if (itemsError) throw itemsError;
+
       this.reloadOrders();
     } catch (e) {
       console.error('Failed to update order', e);
@@ -156,7 +191,8 @@ export class DataService {
 
   async deleteOrder(id: string) {
     try {
-      await firstValueFrom(this.http.delete(`${this.apiUrl}/orders/${id}`));
+      const { error } = await this.supabase.from('orders').delete().eq('id', id);
+      if (error) throw error;
       this.reloadOrders();
     } catch (e) {
       console.error('Failed to delete order', e);
@@ -165,6 +201,6 @@ export class DataService {
 
   getOrderItems(orderId: string): OrderItem[] {
     const order = this._orders().find((o) => o.id === orderId);
-    return order?.items || [];
+    return order?.order_items || [];
   }
 }

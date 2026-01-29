@@ -50,14 +50,14 @@ import { DatePipe } from '@angular/common';
                       <div
                         class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-600 dark:text-zinc-300"
                       >
-                        {{ customer.fullName.slice(0, 2).toUpperCase() }}
+                        {{ customer.full_name.slice(0, 2).toUpperCase() }}
                       </div>
-                      {{ customer.fullName }}
+                      {{ customer.full_name }}
                     </div>
                   </td>
                   <td class="px-4 py-3 text-zinc-600 dark:text-zinc-300">{{ customer.email }}</td>
                   <td class="px-4 py-3 text-zinc-500 dark:text-zinc-400">
-                    {{ customer.createdAt | date: 'mediumDate' }}
+                    {{ customer.created_at | date: 'mediumDate' }}
                   </td>
                   <td class="px-4 py-3">
                     <div class="flex items-center justify-center gap-2">

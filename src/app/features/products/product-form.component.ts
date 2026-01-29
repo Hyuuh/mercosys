@@ -112,7 +112,7 @@ export class ProductFormComponent implements OnInit {
 
   onSubmit() {
     if (this.productForm.valid) {
-      const value = this.productForm.value as Omit<Product, 'id' | 'createdAt'>;
+      const value = this.productForm.value as Omit<Product, 'id' | 'created_at'>;
 
       if (this.isEditMode && this.productId) {
         this.dataService.updateProduct(this.productId, value);

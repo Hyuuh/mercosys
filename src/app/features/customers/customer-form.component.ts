@@ -42,12 +42,12 @@ import { InputDirective } from '@ui/components/forms.directive';
       >
         <div class="grid w-full items-center gap-1.5">
           <label
-            for="fullName"
+            for="full_name"
             class="text-sm font-medium leading-none text-zinc-900 dark:text-zinc-100"
             >Nombre Completo</label
           >
-          <input uiInput type="text" formControlName="fullName" id="fullName" />
-          @if (customerForm.get('fullName')?.invalid && customerForm.get('fullName')?.touched) {
+          <input uiInput type="text" formControlName="full_name" id="full_name" />
+          @if (customerForm.get('full_name')?.invalid && customerForm.get('full_name')?.touched) {
             <p class="text-xs text-red-500 font-medium">El nombre es requerido.</p>
           }
         </div>
@@ -82,7 +82,7 @@ export class CustomerFormComponent implements OnInit {
   customerId: string | null = null;
 
   customerForm = this.fb.group({
-    fullName: ['', Validators.required],
+    full_name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
   });
 
@@ -101,7 +101,7 @@ export class CustomerFormComponent implements OnInit {
 
   onSubmit() {
     if (this.customerForm.valid) {
-      const value = this.customerForm.value as Omit<Customer, 'id' | 'createdAt'>;
+      const value = this.customerForm.value as Omit<Customer, 'id' | 'created_at'>;
 
       if (this.isEditMode && this.customerId) {
         this.dataService.updateCustomer(this.customerId, value);

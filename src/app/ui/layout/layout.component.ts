@@ -76,7 +76,7 @@ import { ButtonDirective } from '@ui/components/button.directive';
           <a
             routerLink="/orders"
             (click)="closeSidebar()"
-            routerLinkActive="bg-zinc-200/60 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-50"
+            routerLinkActive="bg-zinc-200/60 dark:bg-zinc-800/90 text-zinc-900 dark:text-zinc-50"
             class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 rounded-md hover:bg-zinc-200/60 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors"
           >
             <svg

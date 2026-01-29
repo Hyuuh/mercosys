@@ -1,8 +1,8 @@
 export interface Customer {
   id: string;
   email: string;
-  fullName: string;
-  createdAt: string;
+  full_name: string;
+  created_at: string;
 }
 
 export interface Product {
@@ -10,25 +10,25 @@ export interface Product {
   sku: string;
   name: string;
   price: number;
-  createdAt: string;
+  created_at: string;
 }
 
 export interface OrderItem {
   id: string;
-  orderId: string;
-  productId: string;
-  productName?: string; // Hydrated for UI
+  order_id: string;
+  product_id: string;
   quantity: number;
-  unitPrice: number;
+  unit_price: number;
+  productName?: string; // Hydrated for UI
 }
 
 export interface Order {
   id: string;
-  customerId: string;
+  customer_id: string;
   customerName?: string; // Hydrated for UI
-  totalPrice: number;
+  total_price: number;
   status: 'pending' | 'completed' | 'cancelled';
-  placedAt: string;
-  expiresAt?: string;
-  items?: OrderItem[];
+  placed_at: string;
+  expires_at?: string;
+  order_items?: OrderItem[];
 }

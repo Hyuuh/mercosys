@@ -62,13 +62,13 @@ import { DecimalPipe } from '@angular/common';
               class="text-sm font-medium leading-none text-zinc-900 dark:text-zinc-100 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >Cliente</label
             >
-            <select uiSelect formControlName="customerId" id="customer">
+            <select uiSelect formControlName="customer_id" id="customer">
               <option value="" disabled selected>Selecciona un cliente...</option>
               @for (c of dataService.customers(); track c.id) {
-                <option [value]="c.id">{{ c.fullName }} ({{ c.email }})</option>
+                <option [value]="c.id">{{ c.full_name }} ({{ c.email }})</option>
               }
             </select>
-            @if (orderForm.get('customerId')?.invalid && orderForm.get('customerId')?.touched) {
+            @if (orderForm.get('customer_id')?.invalid && orderForm.get('customer_id')?.touched) {
               <p class="text-xs text-red-500 font-medium">Debes seleccionar un cliente.</p>
             }
           </div>
@@ -191,7 +191,7 @@ export class OrderFormComponent {
   dataService = inject(DataService);
 
   orderForm = this.fb.group({
-    customerId: ['', Validators.required],
+    customer_id: ['', Validators.required],
     items: this.fb.array([]),
   });
 
@@ -230,15 +230,15 @@ export class OrderFormComponent {
   }
 
   patchForm(order: Order) {
-    this.orderForm.patchValue({ customerId: order.customerId });
+    this.orderForm.patchValue({ customer_id: order.customer_id });
 
     this.items.clear();
-    if (order.items) {
-      order.items.forEach((item) => {
+    if (order.order_items) {
+      order.order_items.forEach((item) => {
         const itemGroup = this.fb.group({
-          productId: [item.productId, Validators.required],
+          productId: [item.product_id, Validators.required],
           quantity: [item.quantity, [Validators.required, Validators.min(1)]],
-          unitPrice: [{ value: item.unitPrice, disabled: true }],
+          unitPrice: [{ value: item.unit_price, disabled: true }],
         });
         this.items.push(itemGroup);
       });
@@ -286,9 +286,9 @@ export class OrderFormComponent {
 
       // Prepare data for service
       const items = formVal.items!.map((item: any) => ({
-        productId: item.productId,
+        product_id: item.productId,
         quantity: item.quantity,
-        unitPrice: item.unitPrice,
+        unit_price: item.unitPrice,
       }));
 
       if (this.isEditMode() && this.orderId()) {
@@ -296,8 +296,8 @@ export class OrderFormComponent {
         this.dataService.updateOrder(
           this.orderId()!,
           {
-            customerId: formVal.customerId!,
-            totalPrice: this.total(),
+            customer_id: formVal.customer_id!,
+            total_price: this.total(),
             status: currentOrder?.status || 'pending',
           },
           items,
@@ -305,8 +305,8 @@ export class OrderFormComponent {
       } else {
         this.dataService.addOrder(
           {
-            customerId: formVal.customerId!,
-            totalPrice: this.total(),
+            customer_id: formVal.customer_id!,
+            total_price: this.total(),
             status: 'pending',
           },
           items,
