@@ -9,7 +9,7 @@ import { ButtonDirective } from '@ui/components/button.directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
-      class="flex h-screen w-full bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 antialiased font-sans transition-colors duration-300"
+      class="flex h-screen w-full bg-white dark:bg-neutral-950 text-neutral-950 dark:text-neutral-50 antialiased font-sans transition-colors duration-300"
     >
       <!-- Mobile Backdrop -->
       @if (sidebarOpen()) {
@@ -22,16 +22,16 @@ import { ButtonDirective } from '@ui/components/button.directive';
       <!-- Sidebar (Desktop & Mobile) -->
       <aside
         [class]="
-          'fixed inset-y-0 left-0 z-50 w-64 border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/50 backdrop-blur-xl transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0 flex flex-col ' +
+          'fixed inset-y-0 left-0 z-50 w-64 border-r border-neutral-200 dark:border-neutral-800 bg-neutral-50/60 dark:bg-neutral-950/50 dark:backdrop-blur-xl backdrop-blur-2xl transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0 flex flex-col ' +
           (sidebarOpen() ? 'translate-x-0' : '-translate-x-full')
         "
       >
         <div
-          class="h-14 flex items-center justify-between px-6 border-b border-zinc-200 dark:border-zinc-800"
+          class="h-14 flex items-center justify-between px-6 border-b border-neutral-200 dark:border-neutral-800"
         >
           <div class="flex items-center gap-2 font-semibold text-lg tracking-tight">
             <div
-              class="w-8 h-8 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 rounded-md flex items-center justify-center"
+              class="w-8 h-8 bg-neutral-900 dark:bg-neutral-50 text-white dark:text-neutral-900 rounded-md flex items-center justify-center"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +52,7 @@ import { ButtonDirective } from '@ui/components/button.directive';
           </div>
           <!-- Close button mobile only -->
           <button
-            class="md:hidden text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50"
+            class="md:hidden text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-50"
             (click)="toggleSidebar()"
           >
             <svg
@@ -76,8 +76,8 @@ import { ButtonDirective } from '@ui/components/button.directive';
           <a
             routerLink="/orders"
             (click)="closeSidebar()"
-            routerLinkActive="bg-zinc-200/60 dark:bg-zinc-800/90 text-zinc-900 dark:text-zinc-50"
-            class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 rounded-md hover:bg-zinc-200/60 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors"
+            routerLinkActive="bg-neutral-200/60 dark:bg-neutral-700/60 text-neutral-900 dark:text-neutral-50"
+            class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400 rounded-md hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60 hover:text-neutral-900 dark:hover:text-neutral-50 transition-colors"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -99,8 +99,8 @@ import { ButtonDirective } from '@ui/components/button.directive';
           <a
             routerLink="/customers"
             (click)="closeSidebar()"
-            routerLinkActive="bg-zinc-200/60 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-50"
-            class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 rounded-md hover:bg-zinc-200/60 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors"
+            routerLinkActive="bg-neutral-200/60 dark:bg-neutral-700/60 text-neutral-900 dark:text-neutral-50"
+            class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400 rounded-md hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60 hover:text-neutral-900 dark:hover:text-neutral-50 transition-colors"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -123,8 +123,8 @@ import { ButtonDirective } from '@ui/components/button.directive';
           <a
             routerLink="/products"
             (click)="closeSidebar()"
-            routerLinkActive="bg-zinc-200/60 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-50"
-            class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 rounded-md hover:bg-zinc-200/60 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors"
+            routerLinkActive="bg-neutral-200/60 dark:bg-neutral-700/60 text-neutral-900 dark:text-neutral-50"
+            class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400 rounded-md hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60 hover:text-neutral-900 dark:hover:text-neutral-50 transition-colors"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -145,16 +145,16 @@ import { ButtonDirective } from '@ui/components/button.directive';
           </a>
         </nav>
 
-        <div class="p-4 border-t border-zinc-200 dark:border-zinc-800">
+        <div class="p-4 border-t border-neutral-200 dark:border-neutral-800">
           <div class="flex items-center gap-3">
             <div
-              class="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-600 dark:text-zinc-300"
+              class="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center text-xs font-bold text-neutral-600 dark:text-neutral-300"
             >
               JD
             </div>
             <div class="text-sm">
-              <p class="font-medium text-zinc-900 dark:text-zinc-100">Administrador</p>
-              <p class="text-xs text-zinc-500 dark:text-zinc-400">Admin</p>
+              <p class="font-medium text-neutral-900 dark:text-neutral-100">Administrador</p>
+              <p class="text-xs text-neutral-500 dark:text-neutral-400">Admin</p>
             </div>
           </div>
         </div>
@@ -162,15 +162,15 @@ import { ButtonDirective } from '@ui/components/button.directive';
 
       <!-- Main Content -->
       <main
-        class="flex-1 flex flex-col min-w-0 bg-white dark:bg-zinc-950 overflow-hidden transition-colors"
+        class="flex-1 flex flex-col min-w-0 bg-white dark:bg-neutral-950 overflow-hidden transition-colors"
       >
         <!-- Header -->
         <header
-          class="h-14 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-4 md:px-6 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm z-10 sticky top-0"
+          class="h-14 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between px-4 md:px-6 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-sm z-10 sticky top-0"
         >
           <div class="flex items-center gap-3">
             <button
-              class="md:hidden p-2 -ml-2 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50"
+              class="md:hidden p-2 -ml-2 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-50"
               (click)="toggleSidebar()"
             >
               <svg
@@ -189,7 +189,7 @@ import { ButtonDirective } from '@ui/components/button.directive';
                 <line x1="3" y1="18" x2="21" y2="18"></line>
               </svg>
             </button>
-            <h1 class="font-semibold text-lg text-zinc-900 dark:text-zinc-50">Dashboard</h1>
+            <h1 class="font-semibold text-lg text-neutral-900 dark:text-neutral-50">Dashboard</h1>
           </div>
 
           <div class="flex gap-2">

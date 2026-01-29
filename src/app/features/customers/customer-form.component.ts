@@ -14,13 +14,13 @@ import { InputDirective } from '@ui/components/forms.directive';
   template: `
     <div class="space-y-6">
       <div
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 dark:border-zinc-800 pb-4 gap-4"
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-neutral-200 dark:border-neutral-800 pb-4 gap-4"
       >
         <div>
-          <h2 class="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+          <h2 class="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50">
             {{ isEditMode ? 'Editar Cliente' : 'Nuevo Cliente' }}
           </h2>
-          <p class="text-sm text-zinc-500 dark:text-zinc-400">
+          <p class="text-sm text-neutral-500 dark:text-neutral-400">
             {{
               isEditMode
                 ? 'Actualiza los datos del cliente.'
@@ -28,8 +28,8 @@ import { InputDirective } from '@ui/components/forms.directive';
             }}
           </p>
         </div>
-        <div class="flex gap-2">
-          <a routerLink="/customers" uiButton variant="outline"> Cancelar </a>
+        <div class="flex gap-2 items-center justify-center">
+          <a routerLink="/customers" uiButton variant="destructive"> Cancelar </a>
           <button (click)="onSubmit()" [disabled]="customerForm.invalid" uiButton variant="primary">
             Guardar Cliente
           </button>
@@ -38,12 +38,12 @@ import { InputDirective } from '@ui/components/forms.directive';
 
       <form
         [formGroup]="customerForm"
-        class="bg-white dark:bg-zinc-950 p-6 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4 max-w-2xl"
+        class="bg-white dark:bg-neutral-950 p-6 rounded-md border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4 max-w-2xl"
       >
         <div class="grid w-full items-center gap-1.5">
           <label
             for="full_name"
-            class="text-sm font-medium leading-none text-zinc-900 dark:text-zinc-100"
+            class="text-sm font-medium leading-none text-neutral-900 dark:text-neutral-100"
             >Nombre Completo</label
           >
           <input uiInput type="text" formControlName="full_name" id="full_name" />
@@ -55,7 +55,7 @@ import { InputDirective } from '@ui/components/forms.directive';
         <div class="grid w-full items-center gap-1.5">
           <label
             for="email"
-            class="text-sm font-medium leading-none text-zinc-900 dark:text-zinc-100"
+            class="text-sm font-medium leading-none text-neutral-900 dark:text-neutral-100"
             >Email</label
           >
           <input uiInput type="email" formControlName="email" id="email" />

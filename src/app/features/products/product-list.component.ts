@@ -12,21 +12,23 @@ import { ButtonDirective } from '@ui/components/button.directive';
     <div class="space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 class="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+          <h2 class="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50">
             Productos
           </h2>
-          <p class="text-sm text-zinc-500 dark:text-zinc-400">Catálogo de productos disponibles.</p>
+          <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            Catálogo de productos disponibles.
+          </p>
         </div>
         <a routerLink="/products/new" uiButton variant="primary"> + Nuevo Producto </a>
       </div>
 
       <div
-        class="rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm overflow-hidden"
+        class="rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 shadow-sm overflow-hidden"
       >
         <div class="overflow-x-auto">
           <table class="w-full text-sm text-left">
             <thead
-              class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-medium h-10"
+              class="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 font-medium h-10"
             >
               <tr>
                 <th class="px-4 py-3 align-middle font-medium whitespace-nowrap">SKU</th>
@@ -39,19 +41,19 @@ import { ButtonDirective } from '@ui/components/button.directive';
                 </th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
+            <tbody class="divide-y divide-neutral-200 dark:divide-neutral-800">
               @for (product of dataService.products(); track product.id) {
-                <tr class="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
+                <tr class="hover:bg-neutral-50/50 dark:hover:bg-neutral-900/50 transition-colors">
                   <td
-                    class="px-4 py-3 font-medium text-zinc-600 dark:text-zinc-300 font-mono text-xs whitespace-nowrap"
+                    class="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-300 font-mono text-xs whitespace-nowrap"
                   >
                     {{ product.sku }}
                   </td>
-                  <td class="px-4 py-3 text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
+                  <td class="px-4 py-3 text-neutral-900 dark:text-neutral-100 whitespace-nowrap">
                     {{ product.name }}
                   </td>
                   <td
-                    class="px-4 py-3 text-right font-medium text-zinc-900 dark:text-zinc-100 whitespace-nowrap"
+                    class="px-4 py-3 text-right font-medium text-neutral-900 dark:text-neutral-100 whitespace-nowrap"
                   >
                     {{ product.price | currency: 'USD' }}
                   </td>
@@ -59,7 +61,7 @@ import { ButtonDirective } from '@ui/components/button.directive';
                     <div class="flex items-center justify-center gap-2">
                       <a
                         [routerLink]="['/products', product.id, 'edit']"
-                        class="text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors p-1"
+                        class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-50 transition-colors p-1"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +80,7 @@ import { ButtonDirective } from '@ui/components/button.directive';
                       </a>
                       <button
                         (click)="deleteProduct(product.id)"
-                        class="text-zinc-500 hover:text-red-600 dark:text-zinc-400 dark:hover:text-red-400 transition-colors p-1"
+                        class="text-neutral-500 hover:text-red-600 dark:text-neutral-400 dark:hover:text-red-400 transition-colors p-1"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

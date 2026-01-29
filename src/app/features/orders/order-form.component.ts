@@ -21,13 +21,13 @@ import { DecimalPipe } from '@angular/common';
   template: `
     <div class="space-y-6">
       <div
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 dark:border-zinc-800 pb-4 gap-4"
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-neutral-200 dark:border-neutral-800 pb-4 gap-4"
       >
         <div>
-          <h2 class="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+          <h2 class="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50">
             {{ isEditMode() ? 'Editar Orden' : 'Nueva Orden' }}
           </h2>
-          <p class="text-sm text-zinc-500 dark:text-zinc-400">
+          <p class="text-sm text-neutral-500 dark:text-neutral-400">
             {{
               isEditMode()
                 ? 'Modifica los detalles de la orden existente.'
@@ -51,15 +51,15 @@ import { DecimalPipe } from '@angular/common';
       <form [formGroup]="orderForm" class="space-y-8">
         <!-- Customer Selection -->
         <div
-          class="bg-white dark:bg-zinc-950 p-6 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4"
+          class="bg-white dark:bg-neutral-950 p-6 rounded-md border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4"
         >
-          <h3 class="text-lg font-medium text-zinc-900 dark:text-zinc-50">
+          <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-50">
             1. Seleccionar Cliente
           </h3>
           <div class="grid w-full max-w-sm items-center gap-1.5">
             <label
               for="customer"
-              class="text-sm font-medium leading-none text-zinc-900 dark:text-zinc-100 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              class="text-sm font-medium leading-none text-neutral-900 dark:text-neutral-100 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >Cliente</label
             >
             <select uiSelect formControlName="customer_id" id="customer">
@@ -76,10 +76,10 @@ import { DecimalPipe } from '@angular/common';
 
         <!-- Order Items -->
         <div
-          class="bg-white dark:bg-zinc-950 p-6 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4"
+          class="bg-white dark:bg-neutral-950 p-6 rounded-md border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4"
         >
           <div class="flex items-center justify-between">
-            <h3 class="text-lg font-medium text-zinc-900 dark:text-zinc-50">
+            <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-50">
               2. Agregar Productos
             </h3>
             <button type="button" (click)="addItem()" uiButton variant="secondary" size="sm">
@@ -91,11 +91,11 @@ import { DecimalPipe } from '@angular/common';
             @for (itemCtrl of items.controls; track $index; let i = $index) {
               <div
                 [formGroupName]="i"
-                class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end border-b border-zinc-100 dark:border-zinc-800 pb-4 last:border-0 last:pb-0"
+                class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end border-b border-neutral-100 dark:border-neutral-800 pb-4 last:border-0 last:pb-0"
               >
                 <div class="col-span-1 md:col-span-6 space-y-1">
                   @if (i === 0 || items.length > 0) {
-                    <label class="text-xs font-medium text-zinc-900 dark:text-zinc-100"
+                    <label class="text-xs font-medium text-neutral-900 dark:text-neutral-100"
                       >Producto</label
                     >
                   }
@@ -108,7 +108,7 @@ import { DecimalPipe } from '@angular/common';
                 </div>
                 <div class="col-span-1 md:col-span-2 space-y-1">
                   @if (i === 0 || items.length > 0) {
-                    <label class="text-xs font-medium text-zinc-900 dark:text-zinc-100"
+                    <label class="text-xs font-medium text-neutral-900 dark:text-neutral-100"
                       >Cantidad</label
                     >
                   }
@@ -116,12 +116,12 @@ import { DecimalPipe } from '@angular/common';
                 </div>
                 <div class="col-span-1 md:col-span-2 space-y-1">
                   @if (i === 0 || items.length > 0) {
-                    <label class="text-xs font-medium text-zinc-900 dark:text-zinc-100"
+                    <label class="text-xs font-medium text-neutral-900 dark:text-neutral-100"
                       >Precio Unit.</label
                     >
                   }
                   <div
-                    class="flex h-10 w-full items-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 px-3 py-2 text-sm text-zinc-500 dark:text-zinc-400 shadow-sm"
+                    class="flex h-10 w-full items-center rounded-md border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-500 dark:text-neutral-400 shadow-sm"
                   >
                     $ {{ itemCtrl.get('unitPrice')?.value || 0 }}
                   </div>
@@ -155,7 +155,7 @@ import { DecimalPipe } from '@angular/common';
             }
             @if (items.length === 0) {
               <div
-                class="text-center py-8 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-md text-zinc-500 dark:text-zinc-400 text-sm"
+                class="text-center py-8 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-md text-neutral-500 dark:text-neutral-400 text-sm"
               >
                 No hay productos en la orden. Agrega uno para continuar.
               </div>
@@ -163,16 +163,18 @@ import { DecimalPipe } from '@angular/common';
           </div>
 
           <!-- Summary -->
-          <div class="flex justify-end pt-4 border-t border-zinc-200 dark:border-zinc-800 mt-4">
+          <div
+            class="flex justify-end pt-4 border-t border-neutral-200 dark:border-neutral-800 mt-4"
+          >
             <div class="w-full md:w-1/3 space-y-2">
               <div class="flex justify-between text-sm">
-                <span class="text-zinc-500 dark:text-zinc-400">Subtotal</span>
-                <span class="font-medium text-zinc-900 dark:text-zinc-100"
+                <span class="text-neutral-500 dark:text-neutral-400">Subtotal</span>
+                <span class="font-medium text-neutral-900 dark:text-neutral-100"
                   >\${{ total() | number: '1.2-2' }}</span
                 >
               </div>
               <div
-                class="flex justify-between text-base font-semibold text-zinc-900 dark:text-zinc-50 border-t border-zinc-200 dark:border-zinc-800 pt-2"
+                class="flex justify-between text-base font-semibold text-neutral-900 dark:text-neutral-50 border-t border-neutral-200 dark:border-neutral-800 pt-2"
               >
                 <span>Total Global</span>
                 <span>\${{ total() | number: '1.2-2' }}</span>

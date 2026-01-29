@@ -13,10 +13,10 @@ import { BadgeComponent } from '@ui/components/badge.component';
     <div class="space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 class="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+          <h2 class="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50">
             Pedidos
           </h2>
-          <p class="text-sm text-zinc-500 dark:text-zinc-400">
+          <p class="text-sm text-neutral-500 dark:text-neutral-400">
             Gestiona y revisa las órdenes compra.
           </p>
         </div>
@@ -41,12 +41,12 @@ import { BadgeComponent } from '@ui/components/badge.component';
       </div>
 
       <div
-        class="rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm overflow-hidden"
+        class="rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 shadow-sm overflow-hidden"
       >
         <div class="overflow-x-auto">
           <table class="w-full text-sm text-left">
             <thead
-              class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-medium h-10"
+              class="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 font-medium h-10"
             >
               <tr>
                 <th class="px-4 py-3 align-middle font-medium whitespace-nowrap">ID</th>
@@ -61,17 +61,17 @@ import { BadgeComponent } from '@ui/components/badge.component';
                 </th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
+            <tbody class="divide-y divide-neutral-200 dark:divide-neutral-800">
               @for (order of dataService.orders(); track order.id) {
-                <tr class="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
+                <tr class="hover:bg-neutral-50/50 dark:hover:bg-neutral-900/50 transition-colors">
                   <td
-                    class="px-4 py-3 font-medium text-zinc-900 dark:text-zinc-100 truncate max-w-25"
+                    class="px-4 py-3 font-medium text-neutral-900 dark:text-neutral-100 truncate max-w-25"
                     title="{{ order.id }}"
                   >
-                    <span class="font-mono text-xs text-zinc-500 dark:text-zinc-500">#</span
+                    <span class="font-mono text-xs text-neutral-500 dark:text-neutral-500">#</span
                     >{{ order.id.slice(-6) }}
                   </td>
-                  <td class="px-4 py-3 text-zinc-600 dark:text-zinc-300 whitespace-nowrap">
+                  <td class="px-4 py-3 text-neutral-600 dark:text-neutral-300 whitespace-nowrap">
                     {{ order.customerName }}
                   </td>
                   <td class="px-4 py-3">
@@ -93,11 +93,11 @@ import { BadgeComponent } from '@ui/components/badge.component';
                       }}
                     </ui-badge>
                   </td>
-                  <td class="px-4 py-3 text-zinc-500 dark:text-zinc-400 whitespace-nowrap">
+                  <td class="px-4 py-3 text-neutral-500 dark:text-neutral-400 whitespace-nowrap">
                     {{ order.placed_at | date: 'mediumDate' }}
                   </td>
                   <td
-                    class="px-4 py-3 text-right font-medium text-zinc-900 dark:text-zinc-100 whitespace-nowrap"
+                    class="px-4 py-3 text-right font-medium text-neutral-900 dark:text-neutral-100 whitespace-nowrap"
                   >
                     {{ order.total_price | currency: 'USD' }}
                   </td>
@@ -105,7 +105,7 @@ import { BadgeComponent } from '@ui/components/badge.component';
                     <div class="flex items-center justify-center gap-1">
                       <a
                         [routerLink]="['/orders', order.id]"
-                        class="text-zinc-500 hover:text-blue-600 dark:text-zinc-400 dark:hover:text-blue-400 transition-colors p-1"
+                        class="text-neutral-500 hover:text-blue-600 dark:text-neutral-400 dark:hover:text-blue-400 transition-colors p-1"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +124,7 @@ import { BadgeComponent } from '@ui/components/badge.component';
                       </a>
                       <button
                         (click)="deleteOrder(order.id)"
-                        class="text-zinc-500 hover:text-red-600 dark:text-zinc-400 dark:hover:text-red-400 transition-colors p-1"
+                        class="text-neutral-500 hover:text-red-600 dark:text-neutral-400 dark:hover:text-red-400 transition-colors p-1"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +147,7 @@ import { BadgeComponent } from '@ui/components/badge.component';
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="6" class="p-8 text-center text-zinc-500 dark:text-zinc-400">
+                  <td colspan="6" class="p-8 text-center text-neutral-500 dark:text-neutral-400">
                     No hay órdenes registradas.
                   </td>
                 </tr>
