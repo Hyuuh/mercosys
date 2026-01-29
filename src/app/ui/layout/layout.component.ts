@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
       <!-- Mobile Backdrop -->
       @if (sidebarOpen()) {
         <div
-          class="fixed inset-0 bg-black/50 z-40 md:hidden animate-in fade-in"
+          class="fixed inset-0  bg-black/30 z-40 md:hidden animate-in fade-in"
           (click)="toggleSidebar()"
         ></div>
       }
@@ -24,7 +24,7 @@ import { CommonModule } from '@angular/common';
       <!-- Sidebar (Desktop & Mobile) -->
       <aside
         [class]="
-          'fixed inset-y-0 left-0 z-50 w-64 border-r border-neutral-200 dark:border-neutral-800 bg-neutral-50/60 dark:bg-neutral-950/50 dark:backdrop-blur-xl backdrop-blur-2xl transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0 flex flex-col ' +
+          'fixed inset-y-0 left-0 z-50 w-64 border-r border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-950/50 dark:backdrop-blur-xl backdrop-blur-2xl transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0 flex flex-col ' +
           (sidebarOpen() ? 'translate-x-0' : '-translate-x-full')
         "
       >
