@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { createClient, SupabaseClient, User, Session } from '@supabase/supabase-js';
-import { environment } from '../../../environments/environment';
+import { environment } from '@env';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +33,7 @@ export class SupabaseService {
     await this.supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
-        redirectTo: window.location.origin,
+        redirectTo: environment.APP_URL,
       },
     });
   }
