@@ -30,6 +30,9 @@
       ],
       "@ui/*": [
         "src/app/ui/*"
+      ],
+      "@env": [
+        "src/environments/environment.ts"
       ]
     }
   },
