@@ -24,9 +24,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ]
+            "styles": ["src/styles.css"]
           },
           "configurations": {
             "production": {
@@ -74,6 +72,23 @@
           "builder": "@angular/build:unit-test"
         }
       }
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "flat": true,
+      "inlineStyle": true,
+      "inlineTemplate": true,
+      "skipTests": true,
+      "displayBlock": true,
+      "changeDetection": "OnPush"
+    },
+    "@schematics/angular:directive": {
+      "flat": true,
+      "skipTests": true
+    },
+    "@schematics/angular:service": {
+      "skipTests": true
     }
   }
 }

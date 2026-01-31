@@ -6,7 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "g:feat": "f() { ng g c features/\"$1\" --type=component; }; f",
+    "g:ui": "f() { ng g c ui/components/\"$1\" --type=component; }; f",
+    "g:dir": "f() { ng g d ui/components/\"$1\" }; f"
   },
   "prettier": {
     "printWidth": 100,
