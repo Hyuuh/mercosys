@@ -1,13 +1,14 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { CurrencyPipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DataService } from '@core/services/data.service';
 import { ButtonDirective } from '@ui/components/button.directive';
 import { BadgeComponent } from '@ui/components/badge.component';
+import { formatDate } from '@core/utils/date-formatter';
+import { formatCurrency } from '@core/utils/number-formatter';
 
 @Component({
   selector: 'app-order-list',
-  imports: [RouterLink, ButtonDirective, BadgeComponent, DatePipe, CurrencyPipe],
+  imports: [RouterLink, ButtonDirective, BadgeComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="space-y-6">
@@ -43,10 +44,10 @@ import { BadgeComponent } from '@ui/components/badge.component';
       <div
         class="rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 shadow-sm overflow-hidden"
       >
-        <div class="overflow-x-auto">
+        <div class="overflow-auto max-h-150">
           <table class="w-full text-sm text-left">
             <thead
-              class="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 font-medium h-10"
+              class="sticky top-0 z-10 bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 font-medium h-10"
             >
               <tr>
                 <th class="px-4 py-3 align-middle font-medium whitespace-nowrap">ID</th>
@@ -94,12 +95,12 @@ import { BadgeComponent } from '@ui/components/badge.component';
                     </ui-badge>
                   </td>
                   <td class="px-4 py-3 text-neutral-500 dark:text-neutral-400 whitespace-nowrap">
-                    {{ order.placed_at | date: 'mediumDate' }}
+                    {{ formatDate(order.placed_at) }}
                   </td>
                   <td
                     class="px-4 py-3 text-right font-medium text-neutral-900 dark:text-neutral-100 whitespace-nowrap"
                   >
-                    {{ order.total_price | currency: 'USD' }}
+                    {{ formatCurrency(order.total_price) }}
                   </td>
                   <td class="px-4 py-3">
                     <div class="flex items-center justify-center gap-1">
@@ -161,6 +162,8 @@ import { BadgeComponent } from '@ui/components/badge.component';
 })
 export class OrderListComponent {
   dataService = inject(DataService);
+  formatDate = formatDate;
+  formatCurrency = formatCurrency;
 
   deleteOrder(id: string) {
     if (confirm('¿Estás seguro de que quieres eliminar esta orden?')) {

@@ -30,13 +30,21 @@ import { InputDirective } from '@ui/components/forms.directive';
         </div>
         <div class="flex gap-2 items-center justify-center">
           <a routerLink="/products" uiButton variant="destructive"> Cancelar </a>
-          <button (click)="onSubmit()" [disabled]="productForm.invalid" uiButton variant="primary">
+          <button
+            type="submit"
+            form="product-form"
+            [disabled]="productForm.invalid"
+            uiButton
+            variant="primary"
+          >
             Guardar Producto
           </button>
         </div>
       </div>
 
       <form
+        id="product-form"
+        (ngSubmit)="onSubmit()"
         [formGroup]="productForm"
         class="bg-white dark:bg-neutral-950 p-6 rounded-md border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4 max-w-2xl"
       >

@@ -3,10 +3,13 @@ import { FormBuilder, ReactiveFormsModule, Validators, FormArray, FormGroup } fr
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 
 import { DataService } from '@core/services/data.service';
-import { Order } from '@core/models';
 import { ButtonDirective } from '@ui/components/button.directive';
-import { InputDirective, SelectDirective } from '@ui/components/forms.directive';
+import { InputDirective } from '@ui/components/forms.directive';
+import { SelectComponent, SelectItemComponent } from '@ui/components/select/select.component';
 import { DecimalPipe } from '@angular/common';
+
+import { Order } from '@core/models';
+
 @Component({
   selector: 'app-order-form',
   imports: [
@@ -14,7 +17,8 @@ import { DecimalPipe } from '@angular/common';
     RouterLink,
     ButtonDirective,
     InputDirective,
-    SelectDirective,
+    SelectComponent,
+    SelectItemComponent,
     DecimalPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,7 +42,8 @@ import { DecimalPipe } from '@angular/common';
         <div class="flex gap-2">
           <a routerLink="/orders" uiButton variant="outline"> Cancelar </a>
           <button
-            (click)="onSubmit()"
+            type="submit"
+            form="order-form"
             [disabled]="orderForm.invalid || items.length === 0"
             uiButton
             variant="primary"
@@ -48,7 +53,7 @@ import { DecimalPipe } from '@angular/common';
         </div>
       </div>
 
-      <form [formGroup]="orderForm" class="space-y-8">
+      <form id="order-form" (ngSubmit)="onSubmit()" [formGroup]="orderForm" class="space-y-8">
         <!-- Customer Selection & Status -->
         <div
           class="bg-white dark:bg-neutral-950 p-6 rounded-md border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4"
@@ -56,35 +61,30 @@ import { DecimalPipe } from '@angular/common';
           <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-50">
             1. Detalles Generales
           </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="grid w-full items-center gap-1.5">
-              <label
-                for="customer"
-                class="text-sm font-medium leading-none text-neutral-900 dark:text-neutral-100"
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            <div class="grid w-full gap-1.5">
+              <label class="text-sm font-medium leading-none text-neutral-900 dark:text-neutral-100"
                 >Cliente</label
               >
-              <select uiSelect formControlName="customer_id" id="customer">
-                <option value="" disabled selected>Selecciona un cliente...</option>
+              <ui-select formControlName="customer_id" placeholder="Selecciona un cliente">
                 @for (c of dataService.customers(); track c.id) {
-                  <option [value]="c.id">{{ c.full_name }} ({{ c.email }})</option>
+                  <ui-select-item [value]="c.id">{{ c.full_name }} ({{ c.email }})</ui-select-item>
                 }
-              </select>
+              </ui-select>
               @if (orderForm.get('customer_id')?.invalid && orderForm.get('customer_id')?.touched) {
                 <p class="text-xs text-red-500 font-medium">Debes seleccionar un cliente.</p>
               }
             </div>
 
-            <div class="grid w-full items-center gap-1.5">
-              <label
-                for="status"
-                class="text-sm font-medium leading-none text-neutral-900 dark:text-neutral-100"
+            <div class="grid w-full gap-1.5">
+              <label class="text-sm font-medium leading-none text-neutral-900 dark:text-neutral-100"
                 >Estado de la Orden</label
               >
-              <select uiSelect formControlName="status" id="status">
-                <option value="pending">Pendiente</option>
-                <option value="completed">Completada</option>
-                <option value="cancelled">Cancelada</option>
-              </select>
+              <ui-select formControlName="status" placeholder="Selecciona el estado">
+                <ui-select-item value="pending">Pendiente</ui-select-item>
+                <ui-select-item value="completed">Completada</ui-select-item>
+                <ui-select-item value="cancelled">Cancelada</ui-select-item>
+              </ui-select>
             </div>
           </div>
         </div>
@@ -114,12 +114,15 @@ import { DecimalPipe } from '@angular/common';
                       >Producto</label
                     >
                   }
-                  <select uiSelect formControlName="productId" (change)="onProductSelect(i)">
-                    <option value="" disabled>Seleccionar producto...</option>
+                  <ui-select
+                    formControlName="productId"
+                    (ngModelChange)="onProductSelect(i)"
+                    placeholder="Seleccionar producto..."
+                  >
                     @for (p of dataService.products(); track p.id) {
-                      <option [value]="p.id">{{ p.name }} - \${{ p.price }}</option>
+                      <ui-select-item [value]="p.id">{{ p.name }} - \${{ p.price }}</ui-select-item>
                     }
-                  </select>
+                  </ui-select>
                 </div>
                 <div class="col-span-1 md:col-span-2 space-y-1">
                   @if (i === 0 || items.length > 0) {

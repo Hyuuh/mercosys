@@ -3,11 +3,11 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DataService } from '@core/services/data.service';
 import { ButtonDirective } from '@ui/components/button.directive';
-import { DatePipe } from '@angular/common';
+import { formatDate } from '@core/utils/date-formatter';
 
 @Component({
   selector: 'app-customer-list',
-  imports: [RouterLink, ButtonDirective, DatePipe],
+  imports: [RouterLink, ButtonDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="space-y-6">
@@ -26,10 +26,10 @@ import { DatePipe } from '@angular/common';
       <div
         class="rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 shadow-sm overflow-hidden"
       >
-        <div class="overflow-x-auto">
+        <div class="overflow-auto max-h-150">
           <table class="w-full text-sm text-left">
             <thead
-              class="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 font-medium h-10"
+              class="sticky top-0 z-10 bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 font-medium h-10"
             >
               <tr>
                 <th class="px-4 py-3 align-middle font-medium whitespace-nowrap">
@@ -59,7 +59,7 @@ import { DatePipe } from '@angular/common';
                     {{ customer.email }}
                   </td>
                   <td class="px-4 py-3 text-neutral-500 dark:text-neutral-400">
-                    {{ customer.created_at | date: 'mediumDate' }}
+                    {{ formatDate(customer.created_at) }}
                   </td>
                   <td class="px-4 py-3">
                     <div class="flex items-center justify-center gap-2">
@@ -115,6 +115,7 @@ import { DatePipe } from '@angular/common';
 })
 export class CustomerListComponent {
   dataService = inject(DataService);
+  formatDate = formatDate;
 
   deleteCustomer(id: string) {
     if (confirm('¿Confirmas eliminar este cliente?')) {

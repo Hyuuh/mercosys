@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
       <!-- Mobile Backdrop -->
       @if (sidebarOpen()) {
         <div
-          class="fixed inset-0  bg-black/30 z-40 md:hidden animate-in fade-in"
+          class="fixed inset-0 bg-black/50 backdrop-blur-xs z-40 md:hidden animate-in fade-in"
           (click)="toggleSidebar()"
         ></div>
       }
@@ -24,14 +24,14 @@ import { CommonModule } from '@angular/common';
       <!-- Sidebar (Desktop & Mobile) -->
       <aside
         [class]="
-          'fixed inset-y-0 left-0 z-50 w-64 border-r border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-950/50 dark:backdrop-blur-xl backdrop-blur-2xl transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0 flex flex-col ' +
+          'fixed inset-y-0 left-0 z-50 w-64 border-r border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950/90 backdrop-blur-sm transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0 flex flex-col ' +
           (sidebarOpen() ? 'translate-x-0' : '-translate-x-full')
         "
       >
         <div
           class="h-14 flex items-center justify-between px-6 border-b border-neutral-200 dark:border-neutral-800"
         >
-          <div class="flex items-center gap-2 font-semibold text-lg tracking-tight">
+          <a routerLink="/" class="flex items-center gap-2 font-semibold text-lg tracking-tight">
             <div
               class="w-8 h-8 bg-neutral-900 dark:bg-neutral-50 text-white dark:text-neutral-900 rounded-md flex items-center justify-center"
             >
@@ -51,7 +51,7 @@ import { CommonModule } from '@angular/common';
               </svg>
             </div>
             <span>Mercosys</span>
-          </div>
+          </a>
           <!-- Close button mobile only -->
           <button
             class="md:hidden text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-50"

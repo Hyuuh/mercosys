@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DataService } from '@core/services/data.service';
 import { ButtonDirective } from '@ui/components/button.directive';
+import { formatCurrency } from '@core/utils/number-formatter';
 
 @Component({
   selector: 'app-product-list',
@@ -25,10 +26,10 @@ import { ButtonDirective } from '@ui/components/button.directive';
       <div
         class="rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 shadow-sm overflow-hidden"
       >
-        <div class="overflow-x-auto">
+        <div class="overflow-auto max-h-150">
           <table class="w-full text-sm text-left">
             <thead
-              class="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 font-medium h-10"
+              class="sticky top-0 z-10 bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 font-medium h-10"
             >
               <tr>
                 <th class="px-4 py-3 align-middle font-medium whitespace-nowrap">SKU</th>
@@ -55,7 +56,7 @@ import { ButtonDirective } from '@ui/components/button.directive';
                   <td
                     class="px-4 py-3 text-right font-medium text-neutral-900 dark:text-neutral-100 whitespace-nowrap"
                   >
-                    {{ product.price | currency: 'USD' }}
+                    {{ formatCurrency(product.price) }}
                   </td>
                   <td class="px-4 py-3">
                     <div class="flex items-center justify-center gap-2">
@@ -111,6 +112,7 @@ import { ButtonDirective } from '@ui/components/button.directive';
 })
 export class ProductListComponent {
   dataService = inject(DataService);
+  formatCurrency = formatCurrency;
 
   deleteProduct(id: string) {
     if (confirm('¿Confirmas eliminar este producto?')) {
